@@ -6,10 +6,10 @@ window.addEventListener('load', () => {
     }
 
     const guiSettings = {
-        gridSize: 2048,
-        strength: 80,
-        relaxation: 0.965,
-        distance: 0.22,
+        gridSize: 32,
+      relaxation: 0.94,
+      distance: 0.25,
+      strength: 80,
         exportSettings: function() {
             const final = {
                 gridSize: this.gridSize,
