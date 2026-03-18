@@ -6,16 +6,20 @@ window.addEventListener('load', () => {
     }
 
     const guiSettings = {
-        gridSize: 32,
-      relaxation: 0.94,
-      distance: 0.25,
-      strength: 80,
+        gridSize: 256, 
+        relaxation: 0.965,
+        distance: 0.22,
+        strength: 80,
+        rgbMultiplier: 1.5,
+        isSquareGrid: true, // --- NEW: Add to GUI settings ---
         exportSettings: function() {
             const final = {
                 gridSize: this.gridSize,
                 strength: this.strength,
                 relaxation: this.relaxation,
-                distance: this.distance
+                distance: this.distance,
+                rgbMultiplier: this.rgbMultiplier,
+                isSquareGrid: this.isSquareGrid
             };
             console.log("🔥 Final Settings:");
             console.log(JSON.stringify(final, null, 4));
@@ -28,6 +32,8 @@ window.addEventListener('load', () => {
             instance.settings.strength = guiSettings.strength;
             instance.settings.relaxation = guiSettings.relaxation;
             instance.settings.distance = guiSettings.distance;
+            instance.settings.rgbMultiplier = guiSettings.rgbMultiplier;
+            instance.settings.isSquareGrid = guiSettings.isSquareGrid; // --- NEW: Sync boolean ---
             instance.wakeUp();
         });
     };
@@ -42,10 +48,12 @@ window.addEventListener('load', () => {
 
     const gui = new dat.GUI();
     
-    gui.add(guiSettings, 'gridSize', 1, 2048).step(1).name('Grid Size').onFinishChange(syncGridSizeToInstances);
-    
+    gui.add(guiSettings, 'isSquareGrid').name('Square Grid Mode').onChange(syncUniformsToInstances);
+    gui.add(guiSettings, 'gridSize', 1, 10000).step(1).name('Grid Size').onFinishChange(syncGridSizeToInstances);
     gui.add(guiSettings, 'relaxation', 0.8, 0.999).name('Relaxation').onChange(syncUniformsToInstances);
     gui.add(guiSettings, 'strength', 0, 500).name('Strength').onChange(syncUniformsToInstances);
     gui.add(guiSettings, 'distance', 0.01, 1.0).name('Distance').onChange(syncUniformsToInstances);
+    gui.add(guiSettings, 'rgbMultiplier', 0.0, 5.0).step(0.1).name('RGB Intensity').onChange(syncUniformsToInstances);
     
+    gui.add(guiSettings, 'exportSettings').name('Export to Console');
 });
